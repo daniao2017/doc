@@ -24,7 +24,9 @@
 ## 镜像制作脚本和文档
 ### 构建自己的镜像
 该部分待项目通过后，仔细了解，相应链接可以参考官方文档
+
 [openEuler镜像的构建](https://gitee.com/openeuler/raspberrypi/blob/master/documents/openEuler%E9%95%9C%E5%83%8F%E7%9A%84%E6%9E%84%E5%BB%BA.md)
+
 [交叉编译内核](https://gitee.com/openeuler/raspberrypi/blob/master/documents/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8.md)
 
 **预计会使用交叉编译的方式，完成项目镜像的交付**
