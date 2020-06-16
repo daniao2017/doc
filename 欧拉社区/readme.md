@@ -30,6 +30,7 @@
 [交叉编译内核](https://gitee.com/openeuler/raspberrypi/blob/master/documents/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E5%86%85%E6%A0%B8.md)
 
 **预计会使用交叉编译的方式，完成项目镜像的交付**
+
 因为对应的bash脚本，通俗意义上来理解，就是相应命令行的输入及相应环境的判断。该部分在完成UEFI 启动后较容易实现。
 
 ## 引入 UEFI 启动的相关文档
