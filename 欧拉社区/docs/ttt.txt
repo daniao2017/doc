@@ -1,0 +1,60 @@
+
+scripts/sign-file.c:25:30: fatal error: openssl/opensslv.h: No such file or directory
+ #include <openssl/opensslv.h>
+
+sudo apt-get install libssl-dev
+
+yum install openssl-devel
+yum install bison
+yum install flex
+yum install dnf
+
+ssh-keygen
+
+
+Warning: failed loading '/root/rootfs/etc/yum.repos.d/openEuler-20.03-LTS.repo', skipping.
+Error: There are no enabled repos.
+
+mv  /etc/yum.repos.d/CentOS-Base.repo.backup  /etc/yum.repos.d/CentOS-Base.repo
+
+[root@ecs-4494 ~]# yum install openssl-devel
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+Resolving Dependencies
+--> Running transaction check
+---> Package openssl-devel.aarch64 0:1.1.1a-3.el7 will be installed
+--> Processing Dependency: perl(WWW::Curl::Easy) for package: openssl-devel-1.1.1a-3.el7.aarch64
+--> Finished Dependency Resolution
+Error: Package: openssl-devel-1.1.1a-3.el7.aarch64 (kunpeng)
+           Requires: perl(WWW::Curl::Easy)
+ You could try using --skip-broken to work around the problem
+ You could try running: rpm -Va --nofiles --nodigest
+
+make INSTALL_MOD_PATH= ../output/ modules_install
+cp raspberrypi-kernel/arch/arm64/boot/Image   output/
+
+cp raspberrypi-kernel/arch/arm64/boot/dts/broadcom/*.dtb   output/
+
+mkdir output/overlays
+
+cp raspberrypi-kernel/arch/arm64/boot/dts/overlays/*.dtb*   output/overlays/
+
+cp output/Image firmware-master/boot/kernel8.img
+
+cp output/*.dtb firmware-master/boot/
+
+cp output/overlays/*  firmware-master/boot/overlays/
+
+mkdir rootfs
+
+mkdir -p rootfs/var/lib/rpm
+
+rpm --root rootfs/ --initdb
+
+rpm -ivh --nodeps --root /root/rootfs/ http://repo.openeuler.org/openEuler-20.03-LTS/everything/aarch64/Packages/openEuler-release-20.03LTS-33.oe1.aarch64.rpm
+
+mkdir rootfs/etc/yum.repos.d
+vim rootfs/etc/yum.repos.d/openEuler-20.03-LTS.repo
+dnf --installroot=/root/rootfs/ install dnf --nogpgcheck -y
+
+dnf --installroot=/root/rootfs/ makecache
