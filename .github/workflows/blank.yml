@@ -12,7 +12,7 @@ jobs:
 
       - name: Calculate time difference
         run: |
-          START_DATE="2020-12-08"
+          START_DATE="2020-12-8"
           CURRENT_DATE=$(date -u +"%Y-%m-%d")
 
           # 计算时间差
@@ -31,7 +31,7 @@ jobs:
           fi
 
           # 生成 JSON 文件
-          MESSAGE="${YEARS}年:${MONTHS}月:${DAYS}d"
+          MESSAGE="${YEARS}年:${MONTHS}月:${DAYS}日"
           echo "{\"schemaVersion\": 1, \"label\": \"工作年限\", \"message\": \"$MESSAGE\", \"color\": \"blue\"}" > time.json
 
       - name: Commit and push changes
