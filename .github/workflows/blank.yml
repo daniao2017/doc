@@ -2,7 +2,8 @@ name: Update Time Badge
 on:
   schedule:
     - cron: "0 0 * * *"  # 每天 00:00 UTC 运行（北京时间 08:00）
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
+
 jobs:
   update-time:
     runs-on: ubuntu-latest
@@ -12,26 +13,20 @@ jobs:
 
       - name: Calculate time difference
         run: |
-          START_DATE="2020-12-8"
+          START_DATE="2020-12-08"
           CURRENT_DATE=$(date -u +"%Y-%m-%d")
 
-          # 计算时间差
-          YEARS=$(($(date -d "$CURRENT_DATE" +%Y) - $(date -d "$START_DATE" +%Y)))
-          MONTHS=$(($(date -d "$CURRENT_DATE" +%m) - $(date -d "$START_DATE" +%m)))
-          DAYS=$(($(date -d "$CURRENT_DATE" +%d) - $(date -d "$START_DATE" +%d)))
+          # 计算总天数
+          DAYS_TOTAL=$(( ( $(date -d "$CURRENT_DATE" +%s) - $(date -d "$START_DATE" +%s) ) / 86400 ))
 
-          # 处理日期进位
-          if [ "$DAYS" -lt 0 ]; then
-            MONTHS=$((MONTHS - 1))
-            DAYS=$((DAYS + 30))  # 近似处理，不考虑大小月
-          fi
-          if [ "$MONTHS" -lt 0 ]; then
-            YEARS=$((YEARS - 1))
-            MONTHS=$((MONTHS + 12))
-          fi
+          # 计算年、月、日
+          YEARS=$((DAYS_TOTAL / 365))
+          REMAINING_DAYS=$((DAYS_TOTAL % 365))
+          MONTHS=$((REMAINING_DAYS / 30))
+          DAYS=$((REMAINING_DAYS % 30))
 
           # 生成 JSON 文件
-          MESSAGE="${YEARS}年:${MONTHS}月:${DAYS}日"
+          MESSAGE="${YEARS}年:${MONTHS}:${DAYS}日"
           echo "{\"schemaVersion\": 1, \"label\": \"工作年限\", \"message\": \"$MESSAGE\", \"color\": \"blue\"}" > time.json
 
       - name: Commit and push changes
