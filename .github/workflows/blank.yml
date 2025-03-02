@@ -26,7 +26,7 @@ jobs:
           DAYS=$((REMAINING_DAYS % 30))
 
           # 生成 JSON 文件
-          MESSAGE="${YEARS}年:${MONTHS}月:${DAYS}日"
+          MESSAGE="${YEARS}年-${MONTHS}月-${DAYS}日"
           echo "{\"schemaVersion\": 1, \"label\": \"工作年限\", \"message\": \"$MESSAGE\", \"color\": \"blue\"}" > time.json
 
       - name: Commit and push changes
