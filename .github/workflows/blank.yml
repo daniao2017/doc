@@ -1,0 +1,43 @@
+name: Update Time Badge
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 每天 00:00 UTC 运行（北京时间 08:00）
+  workflow_dispatch:  # 允许手动触发
+jobs:
+  update-time:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Calculate time difference
+        run: |
+          START_DATE="2024-01-01"
+          CURRENT_DATE=$(date -u +"%Y-%m-%d")
+
+          # 计算时间差
+          YEARS=$(($(date -d "$CURRENT_DATE" +%Y) - $(date -d "$START_DATE" +%Y)))
+          MONTHS=$(($(date -d "$CURRENT_DATE" +%m) - $(date -d "$START_DATE" +%m)))
+          DAYS=$(($(date -d "$CURRENT_DATE" +%d) - $(date -d "$START_DATE" +%d)))
+
+          # 处理日期进位
+          if [ "$DAYS" -lt 0 ]; then
+            MONTHS=$((MONTHS - 1))
+            DAYS=$((DAYS + 30))  # 近似处理，不考虑大小月
+          fi
+          if [ "$MONTHS" -lt 0 ]; then
+            YEARS=$((YEARS - 1))
+            MONTHS=$((MONTHS + 12))
+          fi
+
+          # 生成 JSON 文件
+          MESSAGE="${YEARS}y ${MONTHS}m ${DAYS}d"
+          echo "{\"schemaVersion\": 1, \"label\": \"工作年限\", \"message\": \"$MESSAGE\", \"color\": \"blue\"}" > time.json
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add time.json
+          git commit -m "Update time badge" || exit 0
+          git push
